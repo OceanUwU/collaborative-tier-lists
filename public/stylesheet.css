@@ -1,0 +1,78 @@
+#root {
+    margin-bottom: 30px
+}
+
+#board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    background-color: rgb(30, 30, 30);
+}
+
+.tier-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    border-radius: 5px;
+    min-height: 80px;
+    padding-right: 20px;
+    margin: 3px;
+    background-color: rgb(56, 56, 56);
+}
+
+.tier-row-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 90px;
+    border-radius: 5px 0px 0px 5px;
+    background-color: grey;
+    word-break: break-word;
+    /*Make text unselectable*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+  
+.tier-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 100px;
+    background-color: white;
+    border: 1px solid rgb(185, 185, 185);
+    /*Make text unselectable*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.tier-card-draggable:hover {
+    opacity: 0.8;
+}
+
+.tier-card-draggable:active {
+    opacity: 0.5;
+}
+  
+#cardBank {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 100px;
+    background-color: rgb(30, 30, 30);
+    padding: 10px;
+    border-radius: 5px;
+}

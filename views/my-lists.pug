@@ -1,0 +1,15 @@
+extends ./lay
+
+block title
+    | Your lists
+
+block content
+    h1 Lists you've created
+    if (lists.length > 0)
+        each list in lists
+            p
+                a(href="/list/"+list.id)=list.name
+    else
+        p
+            | You haven't created any lists! 
+            a(href="/create-list") Create one?

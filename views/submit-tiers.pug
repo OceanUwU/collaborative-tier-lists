@@ -1,0 +1,27 @@
+extends ./lay
+
+block title
+    | Submitting tiers...
+
+block content
+    if (list != null)
+        h1 Submitting your tiers for #{list.name != null ? `"${list.name}"` : "an unnamed list"}
+        hr
+        div#board
+        hr
+        h3 Un-tiered items
+        p You don't need to give a tier to every item. If you're unsure about any of them, you can leave them in the box below.
+        div#cardBank
+        hr
+        button.btn.btn-lg.btn-primary(onclick="submit()") Submit
+    else
+        h1 Invalid list ID
+
+block js
+    if (list != null)
+        script(src="https://cdn.jsdelivr.net/npm/drag-drop-touch-polyfill@1.0.0/DragDropTouch.min.js")
+        script(src="/js/board.js")
+        script.
+            var items = !{list.items};
+            var currentSubmission = !{currentSubmission != null ? currentSubmission.data : "null"};
+        script(src="/js/submit-tiers.js")

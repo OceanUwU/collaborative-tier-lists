@@ -1,0 +1,9 @@
+extends ./lay
+
+block title
+    | Not logged in
+
+block content
+    h2 You aren't logged in!
+    p You need to be logged in to access this page.
+    a.btn.btn-lg.btn-primary(href="/login?returnTo="+returnTo) Log in

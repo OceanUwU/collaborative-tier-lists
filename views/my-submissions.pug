@@ -1,0 +1,13 @@
+extends ./lay
+
+block title
+    | Lists you've submitted tiers to
+
+block content
+    h1 Lists you've submitted tiers to
+    if (lists.length > 0)
+        each list in lists
+            p
+                a(href="/list/"+list.id)=list.name
+    else
+        p You haven't submitted your tiers to any lists.

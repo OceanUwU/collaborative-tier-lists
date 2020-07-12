@@ -1,0 +1,27 @@
+extends ./lay
+
+block title
+    | Creating a new tier list...
+
+block content
+    h2 Creating a new collaborative tier list
+
+
+    form#list(action="" method="post")
+        input.form-control(name="listName" placeholder="List name" maxlength=50)
+        div#items
+
+    div#listItem(style="display: none")
+        div.form-inline
+            input.form-control(name="items[]" placeholder="Item name" onchange="onItemChange($(this))" maxlength=50)
+            button.btn.btn-outline-danger(onclick="removeListItem($(this))") -
+    
+    
+    button.btn.btn-sm.btn-outline-success(onclick="addListItem()") +
+
+    p This list contains #[span#itemCount 0] items out of a maximum of #[span#maxItemCount 200].
+
+    button.btn.btn-lg.btn-outline-primary(onclick="submit()") Create
+
+block js
+    script(src="/js/create-list.js")

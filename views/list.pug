@@ -1,0 +1,40 @@
+extends ./lay
+
+block title
+    | #{list != null ? (list.name != null ? list.name : "Unnamed list") : "List not found"}
+
+block content
+    if (list != null)
+        h1= list.name
+        h4
+            | - A collaborative tier list
+            if (creator.name != null)
+                |  by 
+                img.rounded.border(src=creator.avatarURL+"?size=24")
+                =" "+creator.name
+        p This list has been tiered by #{submitters} #{submitters == 1 ? "person" : "people"}.
+        hr
+        div#board
+        div#untieredItems
+            hr
+            p No one's given a tier to the following items yet:
+            div#cardBank
+        hr
+        if userHasSubmitted
+            p You've submitted your own tiers to this list!
+        a.btn.btn-lg.btn-primary(href="/list/"+list.id+"/submit-tiers")
+            if userHasSubmitted
+                | Edit your tiers
+            else
+                | Submit your own tiers
+        
+    else
+        h1 no list wit dat id
+
+block js
+    if (list != null)
+        script(src="/js/board.js")
+        script.
+            var items = !{list.items};
+            var tieredItems = !{tiers};
+        script(src="/js/list.js")
