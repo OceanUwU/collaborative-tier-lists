@@ -49,3 +49,6 @@ Edit them according to your needs:
 `"host"`: The root URL the app will be accessed from.
 `"identificatorHost"`: The Identificator host. If you don't know what this is, [check this out](https://identificator.xyz).
 `"secret"`: The secret for the cookies.
+
+#### Start
+`npm start`
