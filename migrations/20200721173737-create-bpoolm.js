@@ -1,18 +1,15 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Submissions', {
+    await queryInterface.createTable('bpoolms', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.INTEGER
       },
-      submittedBy: {
-        type: Sequelize.STRING
-      },
-      list: {
-        type: Sequelize.STRING
+      boolx: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +22,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Submissions');
+    await queryInterface.dropTable('bpoolms');
   }
 };

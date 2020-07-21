@@ -21,8 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4 // Or Sequelize.UUIDV1
     },
     name: DataTypes.STRING,
-    createdBy: DataTypes.STRING,
-    items: DataTypes.STRING
+    desc: DataTypes.STRING,
+    public: DataTypes.BOOLEAN,
+    createdBy: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'List',

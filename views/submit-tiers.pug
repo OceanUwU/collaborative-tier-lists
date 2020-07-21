@@ -22,6 +22,8 @@ block js
         script(src="https://cdn.jsdelivr.net/npm/drag-drop-touch-polyfill@1.0.0/DragDropTouch.min.js")
         script(src="/js/board.js")
         script.
-            var items = !{list.items};
-            var currentSubmission = !{currentSubmission != null ? currentSubmission.data : "null"};
+            var items = !{JSON.stringify(items)};
+            var currentSubmission = !{currentSubmission != null ? JSON.stringify(currentSubmission) : "null"};
+        -
+            console.log("aaaaa",JSON.stringify(currentSubmission));
         script(src="/js/submit-tiers.js")

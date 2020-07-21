@@ -29,7 +29,7 @@
     justify-content: center;
     align-items: center;
     height: 80px;
-    width: 90px;
+    width: 100px;
     border-radius: 5px 0px 0px 5px;
     background-color: grey;
     word-break: break-word;
@@ -48,7 +48,11 @@
     align-items: center;
     height: 80px;
     width: 100px;
+    overflow: hidden;
     background-color: white;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
     border: 1px solid rgb(185, 185, 185);
     /*Make text unselectable*/
     -webkit-touch-callout: none;

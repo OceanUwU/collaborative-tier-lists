@@ -14,11 +14,11 @@ function createBoard() {
     }
 }
 
-function createCard(cardData, draggable = false, id = null) {
-    let card = $('<div class="tier-card"'+(id != null ? ' id="'+id+'"' : '')+(draggable ? ' draggable="true"' : '')+'>'+cardData+'</div>');
+function createCard(card, draggable = false) {
+    let cardElem = $('<div class="tier-card" id="tierCard'+card.id+'"'+(draggable ? ' draggable="true"' : '')+(card.type == 1 ? ' style="background-image: url(/itemimg/'+card.id+'.jpg);"' : '')+'>'+(card.type == 0 ? card.data : '')+'</div>');
     if (draggable)
-        card.addClass('tier-card-draggable');
-    return card;
+        cardElem.addClass('tier-card-draggable');
+    return cardElem;
 }
 
 createBoard();

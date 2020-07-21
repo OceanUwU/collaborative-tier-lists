@@ -10,8 +10,9 @@ block content
             | - A collaborative tier list
             if (creator.name != null)
                 |  by 
-                img.rounded.border(src=creator.avatarURL+"?size=24")
+                img.rounded.border(src=creator.avatarURL+"?size=22")
                 =" "+creator.name
+        p=list.desc
         p This list has been tiered by #{submitters} #{submitters == 1 ? "person" : "people"}.
         hr
         div#board
@@ -27,6 +28,12 @@ block content
                 | Edit your tiers
             else
                 | Submit your own tiers
+        if (user && list.createdBy == user.id)
+            hr
+            p You made this list.
+            a.btn.btn-lg.btn-primary(href="/edit-list?id="+list.id) Edit this list
+            br
+            btn.btn.btn-lg.btn-danger(onclick="deleteList()") Delete this list
         
     else
         h1 no list wit dat id
@@ -35,6 +42,7 @@ block js
     if (list != null)
         script(src="/js/board.js")
         script.
-            var items = !{list.items};
+            var items = !{items};
             var tieredItems = !{tiers};
+            var listId = "!{list.id}";
         script(src="/js/list.js")

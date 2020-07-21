@@ -1,18 +1,21 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Submissions', {
+    await queryInterface.createTable('SubmissionItems', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      submittedBy: {
+      item: {
         type: Sequelize.STRING
       },
-      list: {
+      submission: {
         type: Sequelize.STRING
+      },
+      tier: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +28,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Submissions');
+    await queryInterface.dropTable('SubmissionItems');
   }
 };

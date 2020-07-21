@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const expresssession = require('express-session');
-const cookieParser = require('cookie-parser');
 const identificatorHost = "https://identificator.xyz";
 
 const cfg = require("./cfg");
+const db = require('./models');
 
 var app = express();
 app.set('views', './views')
@@ -12,11 +12,11 @@ app.set('view engine', 'pug');
 app.use('/', express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true}));
 
-app.use(cookieParser());
-app.use(expresssession({secret: cfg.secret, resave: false, saveUninitialized: true}));
+var sessionStore = new (require("connect-session-sequelize")(expresssession.Store))({db: db.sequelize});
+app.use(expresssession({secret: cfg.secret, store: sessionStore, resave: false, proxy: true}));
+sessionStore.sync();
 
 const passport = require('./passport');
-const db = require('./models');
 
 app.use(passport.initialize());
 app.use(passport.session());

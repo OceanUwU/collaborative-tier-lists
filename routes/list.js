@@ -1,7 +1,6 @@
 var router = require('express').Router();
 const db = require.main.require('./models');
 const {loadUserProfile} = require.main.require('./passport');
-console.log(db);
 
 router.get('/:listID', async (req, res) => {
     let list = await db.List.findOne({
@@ -10,46 +9,55 @@ router.get('/:listID', async (req, res) => {
         }
     });
     if (list != null) {
-        let submissions = await db.Submission.findAll({
+        let items = await db.Item.findAll({
             where: {
                 list: list.id
             }
         });
 
-        tiers = [];
-        for (i in JSON.parse(list.items))
-            tiers.push({
-                submitters: 0,
-                total: 0
-            });
-        
-        let userHasSubmitted = false;
-        for (let submission of submissions) {
-            let data = JSON.parse(submission.data);
-            for (let i = 0; i < data.length; i++) {
-                let rating = data[i];
-                if (rating != null) {
-                    tiers[i].submitters++;
-                    tiers[i].total += rating;
+        tiers = {};
+        for (let item of items) {
+            let submissions = await db.SubmissionItem.findAll({
+                where: {
+                    item: item.id
                 }
+            });
+
+            let total = 0;
+
+            for (let submission of submissions) {
+                total += submission.tier;
             }
-            if (!userHasSubmitted && req.user != undefined && submission.submittedBy == req.user.id)
-                userHasSubmitted = true;
+
+
+            let data = {
+                submitters: submissions.length,
+            };
+
+            data.tier = data.submitters > 0 ? Math.round(total / data.submitters) : null;
+
+            tiers[item.id] = data;
         }
 
-        for (let i in tiers) {
-            let item = tiers[i];
-            if (item.submitters == 0)
-                tiers[i] = null;
-            else
-                tiers[i] = Math.round(item.total / item.submitters);
-        }
+        let submitters = (await db.Submission.findAll({
+            where: {
+                list: list.id
+            }
+        })).length;
+
+        let userHasSubmitted = (req.user && (await db.Submission.findOne({
+            where: {
+                list: list.id,
+                submittedBy: req.user.id
+            }
+        })) != null ? true : false);
         
         res.render('list', {
             list,
             creator: await loadUserProfile(list.createdBy),
+            items: JSON.stringify(items),
             tiers: JSON.stringify(tiers),
-            submitters: submissions.length,
+            submitters,
             userHasSubmitted
         });
     } else

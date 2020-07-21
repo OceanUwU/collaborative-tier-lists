@@ -2,13 +2,15 @@ var cardBank = $("#cardBank")
 
 var bank = document.querySelector("#cardBank");
 
+let map = currentSubmission == null ? null : currentSubmission.map(e => e.item);
 for (i in items) {
     let divToAppendTo;
-    if (currentSubmission == null || currentSubmission[i] == null)
+    
+    if (map == null || map.indexOf(items[i].id) == -1)
         divToAppendTo = $(cardBank);
     else
-        divToAppendTo = $('#tierRow'+currentSubmission[i]);
-    divToAppendTo.append(createCard(items[i], true, "tierCard"+i));
+        divToAppendTo = $('#tierRow'+currentSubmission[map.indexOf(items[i].id)].tier);
+    divToAppendTo.append(createCard(items[i], true));
 }
 
 const allowDrag = (event) => event.preventDefault();
@@ -17,13 +19,12 @@ function dropInto(event) {
     event.preventDefault();
     //only allow dropping into rows
     let element = $(event.target);
-    let eligibleToDropInto = (element.hasClass('tier-row') || element.attr('id') == "cardBank");
-    console.log(element);
-    if (!eligibleToDropInto) {
+    let eligibleToDropInto = element => (element.hasClass('tier-row') || element.attr('id') == "cardBank");
+    if (!eligibleToDropInto(element)) {
         element = element.parent();
-        if (!eligibleToDropInto) return;
+        if (!eligibleToDropInto(element)) return;
     }
-    if (eligibleToDropInto) {
+    if (eligibleToDropInto(element)) {
         element.append($('#'+event.dataTransfer.getData('id'))[0]);
     }
 };
@@ -44,6 +45,7 @@ $('.tier-row').each((i, e) => {
 
 
 function submit() {
+    let tiers = {};
     $(".tier-card").each((i, e) => {
         let cardValue;
         if ($(e).parent().attr('id') == "cardBank")
@@ -51,12 +53,12 @@ function submit() {
         else
             cardValue = Number($(e).parent().attr('id').substring("tierRow".length));
         
-        items[Number(e.id.substring("tierCard".length))] = cardValue;
+        tiers[e.id.substring("tierCard".length)] = cardValue;
     });
 
     var form = $('<form action="" method="post">');
     form.hide();
-    form.append($('<input name="tiers" value="'+JSON.stringify(items)+'">'));
+    form.append($('<input name="tiers" value=\''+JSON.stringify(tiers)+'\'>'));
     $("body").append(form);
     form.submit();
 }

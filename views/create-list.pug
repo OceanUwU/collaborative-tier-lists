@@ -7,21 +7,41 @@ block content
     h2 Creating a new collaborative tier list
 
 
-    form#list(action="" method="post")
-        input.form-control(name="listName" placeholder="List name" maxlength=50)
+    div#list(action="" method="post")
+        input.form-control#listName(placeholder="List name" maxlength=maxNameLength value=(list != undefined ? list.name : null))
+        textarea.form-control#listDesc(placeholder="List description" maxlength=maxDescLength)= (list != undefined ? list.desc : null)
+        div.form-check
+            input.form-check-input#publicCheck(type="checkbox" checked="true")
+            label.form-check-label.rounded.border(for="publicCheck") Make list public (this list will show on homepage when the list browser is made)
         div#items
 
-    div#listItem(style="display: none")
-        div.form-inline
-            input.form-control(name="items[]" placeholder="Item name" onchange="onItemChange($(this))" maxlength=50)
-            button.btn.btn-outline-danger(onclick="removeListItem($(this))") -
+    div.d-none#listItemText
+        div.form-inline(inputtype="text")
+            div.tier-card
+                //input.form-control(name="items[]" placeholder="Item name" onchange="onItemChange($(this))" maxlength=maxItemTextLength)
+                span(contenteditable="true" onkeyup="itemTextUpdate($(this))" maxlength=maxItemTextLength) Item name
+            label
+                input.d-none(type="file" onchange="switchToImage(this)")
+                span.btn.btn-outline-secondary(type="button")
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-image" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.002 2h-12a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-12-1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12z"/><path d="M10.648 7.646a.5.5 0 0 1 .577-.093L15.002 9.5V14h-14v-2l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71z"/><path fill-rule="evenodd" d="M4.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+            button.btn.btn-outline-danger(onclick="removeListItem($(this))" style="") -
+
+    div.d-none#listItemImage
+        div.form-inline(inputtype="image")
+            div.tier-card
+            button.btn.btn-outline-secondary(role="button" onclick="switchToText($(this))")
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-input-cursor-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 2a.5.5 0 0 1 .5-.5c.862 0 1.573.287 2.06.566.174.099.321.198.44.286.119-.088.266-.187.44-.286A4.165 4.165 0 0 1 10.5 1.5a.5.5 0 0 1 0 1c-.638 0-1.177.213-1.564.434a3.49 3.49 0 0 0-.436.294V7.5H9a.5.5 0 0 1 0 1h-.5v4.272c.1.08.248.187.436.294.387.221.926.434 1.564.434a.5.5 0 0 1 0 1 4.165 4.165 0 0 1-2.06-.566A4.561 4.561 0 0 1 8 13.65a4.561 4.561 0 0 1-.44.285 4.165 4.165 0 0 1-2.06.566.5.5 0 0 1 0-1c.638 0 1.177-.213 1.564-.434.188-.107.335-.214.436-.294V8.5H7a.5.5 0 0 1 0-1h.5V3.228a3.49 3.49 0 0 0-.436-.294A3.166 3.166 0 0 0 5.5 2.5.5.5 0 0 1 5 2zm3.352 1.355zm-.704 9.29z"/><path d="M10 5h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4v1h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4v1zM6 5V4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4z"/></svg>
+            button.btn.btn-outline-danger(onclick="removeListItem($(this))" style="") -
     
     
-    button.btn.btn-sm.btn-outline-success(onclick="addListItem()") +
+    button.btn.btn-sm.btn-outline-success(onclick="addListItem()") +Add Item
 
-    p This list contains #[span#itemCount 0] items out of a maximum of #[span#maxItemCount 200].
+    p This list contains #[span#itemCount 0] items out of a maximum of #[span#maxItemCount=maxListItems].
 
-    button.btn.btn-lg.btn-outline-primary(onclick="submit()") Create
+    button.btn.btn-lg.btn-outline-primary(onclick="submit()") Finish
 
 block js
+    script.
+        const isPublic = !{list != undefined ? String(list.public) : 'false'};
+        const existingItems = !{items == undefined ? 'null' : JSON.stringify(items)};
     script(src="/js/create-list.js")

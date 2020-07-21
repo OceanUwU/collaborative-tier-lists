@@ -1,73 +1,117 @@
-var router = require('express').Router();
+var router = require('express').Router({mergeParams: true});
 const db = require.main.require('./models');
 const availableTiers = [null, 0, 1, 2, 3, 4];
-const route = '/:listID/submit-tiers';
 
-router.get(route, async (req, res) => {
+router.use(async (req, res, next) => {
+    console.log(req.params);
+
     let list = await db.List.findOne({
         where: {
             id: req.params.listID
         }
     });
-    if (list != null) {
-        let currentSubmission = await db.Submission.findOne({
-            where: {
-                submittedBy: req.user.id,
-                list: list.id
-            }
-        });
-        res.render('submit-tiers', {list, currentSubmission});
-    } else
-        res.render('submit-tiers', {list: null});
+
+    res.locals.list = list;
+
+    if (list != null)
+        next();
+    else
+        res.render('submit-tiers');
 });
 
-router.post(route, async (req, res) => {
-    let list = await db.List.findOne({
+router.get('/', async (req, res) => {
+    let items = await db.Item.findAll({
         where: {
-            id: req.params.listID
+            list: res.locals.list.id
         }
     });
 
-    if (list != null) {
-        if (!req.body.hasOwnProperty('tiers') || typeof req.body.tiers != 'string')
-            return;
-        let items = JSON.parse(req.body.tiers);
-        console.log(items);
-        console.log(list);
-        if (!Array.isArray(items))
-            return;
-        if (items.length != JSON.parse(list.items).length)
-            return;
-        for (item of items)
-            if (!availableTiers.includes(item))
-                return;
-        console.log("hmm")
-        let isNewSubmission = (await db.Submission.findOne({
+    let submission = await db.Submission.findOne({
+        where: {
+            submittedBy: req.user.id,
+            list: res.locals.list.id
+        }
+    });
+
+    let currentSubmission = null;
+    if (submission != null) {
+        currentSubmission = await db.SubmissionItem.findAll({
             where: {
-                submittedBy: req.user.id,
-                list: list.id
+                submission: submission.id
             }
-        }) == null ? true : false);
-        if (isNewSubmission) {
-            await db.Submission.create({
-                submittedBy: req.user.id,
-                list: list.id,
-                data: JSON.stringify(items)
-            });
-        } else {
-            await db.Submission.update({
-                data: JSON.stringify(items)
-            },
-            {
+        });
+    }
+
+    res.render('submit-tiers', {items, currentSubmission});
+});
+
+router.post('/', async (req, res) => {
+    let items = (await db.Item.findAll({
+        where: {
+            list: res.locals.list.id
+        }
+    })).map(i => i.id);
+
+    if (!req.body.hasOwnProperty('tiers') || typeof req.body.tiers != 'string')
+        return;
+    let tiers = JSON.parse(req.body.tiers);
+    if (typeof tiers != 'object')
+        return;
+    for (i in tiers) {
+        if (!items.includes(i))
+            return;
+        if (!availableTiers.includes(tiers[i]))
+            return;
+    }
+
+    let submission = await db.Submission.findOne({
+        where: {
+            submittedBy: req.user.id,
+            list: res.locals.list.id
+        }
+    });
+    if (submission == null) {
+        submission = await db.Submission.create({
+            submittedBy: req.user.id,
+            list: res.locals.list.id,
+        });
+    }
+
+    for (i in tiers) {
+        let itemSubmission = await db.SubmissionItem.findOne({
+            where: {
+                submission: submission.id,
+                item: i
+            }
+        });
+        if (tiers[i] != null) {
+            if (itemSubmission == null) {
+                await db.SubmissionItem.create({
+                    submission: submission.id,
+                    item: i,
+                    tier: tiers[i]
+                }).catch(err=>console.log(err));
+            } else {
+                await db.SubmissionItem.update({
+                    tier: tiers[i]
+                },
+                {
+                    where: {
+                        submission: submission.id,
+                        item: i
+                    }
+                });
+            }
+        } else if (itemSubmission != null) {
+            await db.SubmissionItem.destroy({
                 where: {
-                    submittedBy: req.user.id,
-                    list: list.id
+                    submission: submission.id,
+                    item: i
                 }
             });
         }
-        res.redirect(`/list/${list.id}`);
-    } else
-        res.render('submit-tiers', {list: null});
+    }
+    res.redirect(`/list/${res.locals.list.id}`);
 });
 
 module.exports = router;

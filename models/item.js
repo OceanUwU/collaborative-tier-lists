@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Submission extends Model {
+  class Item extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,18 +13,19 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  Submission.init({
+  Item.init({
     id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4 // Or Sequelize.UUIDV1
     },
-    submittedBy: DataTypes.STRING,
-    list: DataTypes.STRING
+    list: DataTypes.STRING,
+    type: DataTypes.INTEGER,
+    data: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Submission',
+    modelName: 'Item',
   });
-  return Submission;
+  return Item;
 };

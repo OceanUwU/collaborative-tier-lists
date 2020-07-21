@@ -19,7 +19,9 @@ router.use(requireAuth);
 
 //all routes which require authentication to use
 router.use('/create-list', require('./create-list'));
-router.use('/list', require('./submit-tiers'));
+router.use('/edit-list', require('./create-list'));
+router.use('/delete-list', require('./delete-list'));
+router.use('/list/:listID/submit-tiers', require('./submit-tiers'));
 router.use('/my-lists', require('./my-lists'));
 router.use('/my-submissions', require('./my-submissions'));
 

@@ -11,10 +11,13 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      createdBy: {
+      desc: {
         type: Sequelize.STRING
       },
-      items: {
+      public: {
+        type: Sequelize.BOOLEAN
+      },
+      createdBy: {
         type: Sequelize.STRING
       },
       createdAt: {
