@@ -25,7 +25,6 @@ function deleteList() {
         callback: result => {
             if (result)
                 $.post('/delete-list', {id: listId}, data => {
-                    console.log(data);
                     if (data)
                         window.location.replace('/');
                 });

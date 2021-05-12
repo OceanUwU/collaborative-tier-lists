@@ -1,13 +1,15 @@
 extends ./lay
 
 block title
-    | Lists you've submitted tiers to
+    | Your tiers
 
 block content
-    h1 Lists you've submitted tiers to
-    if (lists.length > 0)
-        each list in lists
+    h1 Your tiers
+    -
+        console.log(lists)
+    if (submissions.length > 0)
+        each index in Object.keys(lists)
             p
-                a(href="/list/"+list.id)=list.name
+                a(href="/submissions/"+submissions[index].id)=lists[index].name
     else
         p You haven't submitted your tiers to any lists.

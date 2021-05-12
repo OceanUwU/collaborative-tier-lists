@@ -13,6 +13,7 @@ function requireAuth(req, res, next) {
 router.use('/', require('./home'));
 router.use('/', require('./auth'));
 router.use('/list', require('./list'));
+router.use('/submission', require('./submission'));
 
 //function to require authentication to all routes after this
 router.use(requireAuth);

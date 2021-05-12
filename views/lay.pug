@@ -3,6 +3,10 @@ html
     head
         meta(charset="utf-8")
         meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+        
+        meta(property="og:type" content="website")
+        meta(property="og:site_name" content="Collaborative Tier Lists")
+        meta(property="og:image" content="/icon.png")
 
         link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
         link(rel="stylesheet" href="/stylesheet.css")
@@ -10,6 +14,8 @@ html
         title
             block title
             |  - CTL
+        
+        block head
     
     body
         nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.sticky-top
@@ -26,10 +32,10 @@ html
                 if (user != undefined)
                     button.btn.btn-outline-light.dropdown-toggle(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 6px 8px")
                         img.rounded(src=user.avatarURL+"?size=24&nt")
-                        =" "+user.name
+                        =" "+user.username
                     div.dropdown-menu.dropdown-menu-right
-                        a.dropdown-item(href="/my-lists") Lists you've created
-                        a.dropdown-item(href="/my-submissions") Lists you've submitted tiers to
+                        a.dropdown-item(href="/my-lists") Your lists
+                        a.dropdown-item(href="/my-submissions") Your tiers
                         a.dropdown-item(href="/create-list") Create a new tier list
                         div.dropdown-divider
                         a.dropdown-item(href="/logout") Logout

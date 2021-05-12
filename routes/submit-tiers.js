@@ -3,8 +3,6 @@ const db = require.main.require('./models');
 const availableTiers = [null, 0, 1, 2, 3, 4];
 
 router.use(async (req, res, next) => {
-    console.log(req.params);
-
     let list = await db.List.findOne({
         where: {
             id: req.params.listID
@@ -111,7 +109,7 @@ router.post('/', async (req, res) => {
             });
         }
     }
-    res.redirect(`/list/${res.locals.list.id}`);
+    res.redirect(`/submission/${submission.id}`);
 });
 
 module.exports = router;

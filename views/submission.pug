@@ -1,0 +1,39 @@
+extends ./lay
+
+block title
+    | #{list != null ? (list.name != null ? list.name : "Unnamed list") : "List not found"}
+
+block head    
+    meta(property="og:title" content=`${submitter.username}'s tiers for "${list.name}"`)
+    if (list.desc != null)
+        meta(property="og:description" content=list.desc)
+
+block content
+    if (list != null)
+        h1: a(href=`/list/${list.id}`)=list.name
+        h4
+            | - The personal tiers of 
+            img.rounded.border(src=submitter.avatarURL+"?size=22")
+            =" "+submitter.username
+        p=list.desc
+        hr
+        div#board
+        div#untieredItems
+            hr
+            p These items weren't given a tier:
+            div#cardBank
+        if (user && submitter.id == user.id)
+            hr
+            p You chose these tiers.
+            a.btn.btn-lg.btn-primary(href="/list/"+list.id+"/submit-tiers") Edit tiers
+        
+    else
+        h1 no submission wit dat id
+
+block js
+    if (list != null)
+        script(src="/js/board.js")
+        script.
+            var items = !{items};
+            var submissionItems = !{submissionItems};
+        script(src="/js/submission.js")

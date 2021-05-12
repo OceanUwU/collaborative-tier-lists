@@ -88,8 +88,6 @@ router.post('/', async (req, res) => {
         }
     }
 
-    console.log('b')
-
 
     let list, items;
 

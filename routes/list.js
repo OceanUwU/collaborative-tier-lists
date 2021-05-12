@@ -45,12 +45,12 @@ router.get('/:listID', async (req, res) => {
             }
         })).length;
 
-        let userHasSubmitted = (req.user && (await db.Submission.findOne({
+        let userSubmission = req.user ? await db.Submission.findOne({
             where: {
                 list: list.id,
                 submittedBy: req.user.id
             }
-        })) != null ? true : false);
+        }) : null;
         
         res.render('list', {
             list,
@@ -58,7 +58,7 @@ router.get('/:listID', async (req, res) => {
             items: JSON.stringify(items),
             tiers: JSON.stringify(tiers),
             submitters,
-            userHasSubmitted
+            userSubmission
         });
     } else
         res.render('list', {list});

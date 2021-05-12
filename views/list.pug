@@ -3,15 +3,20 @@ extends ./lay
 block title
     | #{list != null ? (list.name != null ? list.name : "Unnamed list") : "List not found"}
 
+block head    
+    meta(property="og:title" content=list.name)
+    if (list.desc != null)
+        meta(property="og:description" content=list.desc)
+
 block content
     if (list != null)
         h1= list.name
         h4
-            | - A collaborative tier list
-            if (creator.name != null)
-                |  by 
-                img.rounded.border(src=creator.avatarURL+"?size=22")
-                =" "+creator.name
+            | - A collaborative tier list by 
+            img.rounded.border(src=creator.avatarURL+"?size=22")
+            =" "+creator.username
+        -
+            console.log(JSON.stringify(list.desc))
         p=list.desc
         p This list has been tiered by #{submitters} #{submitters == 1 ? "person" : "people"}.
         hr
@@ -21,10 +26,12 @@ block content
             p No one's given a tier to the following items yet:
             div#cardBank
         hr
-        if userHasSubmitted
+        if userSubmission != null
             p You've submitted your own tiers to this list!
+            a.btn.btn-lg.btn-secondary(href="/submission/"+userSubmission.id) View your tiers
+            br
         a.btn.btn-lg.btn-primary(href="/list/"+list.id+"/submit-tiers")
-            if userHasSubmitted
+            if userSubmission != null
                 | Edit your tiers
             else
                 | Submit your own tiers

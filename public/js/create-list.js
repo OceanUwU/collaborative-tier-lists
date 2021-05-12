@@ -113,11 +113,9 @@ function submit() {
     if (err)
         return bootbox.alert(err);
 
-    console.log(results);
     let postData = JSON.stringify(results)
-    console.log(postData.length);
     if (postData.length > 100000000)
-        return console.log("The list size must not exceed 100 MB");
+        return bootbox.alert("The list size must not exceed 100 MB");
     if (itemCount <= 0)
         return bootbox.alert("You have to have at least one item!");
     
