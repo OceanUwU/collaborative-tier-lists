@@ -15,8 +15,6 @@ block content
             | - A collaborative tier list by 
             img.rounded.border(src=creator.avatarURL+"?size=22")
             =" "+creator.username
-        -
-            console.log(JSON.stringify(list.desc))
         p=list.desc
         p This list has been tiered by #{submitters} #{submitters == 1 ? "person" : "people"}.
         hr
