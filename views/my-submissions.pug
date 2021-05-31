@@ -8,6 +8,6 @@ block content
     if (submissions.length > 0)
         each index in Object.keys(lists)
             p
-                a(href="/submissions/"+submissions[index].id)=lists[index].name
+                a(href="/submission/"+submissions[index].id)=lists[index].name
     else
         p You haven't submitted your tiers to any lists.
