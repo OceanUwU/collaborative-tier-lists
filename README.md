@@ -20,7 +20,7 @@ never lol. those things above? not gonna happen. unless someone cool makes a pul
 
  
 ## Setup
-If you just want to use the app to make a list, go to [the official site](https://ctl.flynna.uk). Otherwise, if you want to install the app to develop, test or host it or whatever, follow these setup instructions.
+If you just want to use the app to make a list, go to [the official site](https://ctl.ocean.lol). Otherwise, if you want to install the app to develop, test or host it or whatever, follow these setup instructions.
 
 #### Installing
 1. clone this
